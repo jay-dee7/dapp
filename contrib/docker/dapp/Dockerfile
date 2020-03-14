@@ -43,8 +43,6 @@ ENV LANGUAGE en_US:en
 
 USER doichain
 
-
-
 #Copy start scripts
 WORKDIR /home/doichain/scripts/
 COPY entrypoint.sh entrypoint.sh
@@ -64,22 +62,19 @@ RUN sudo dos2unix \
 	doichain-start.sh \
 	dapp-start.sh && \
 	sudo apt-get --purge remove -y dos2unix build-essential autoconf && \
-	sudo rm -rf /var/lib/apt/lists/*
-
-#Create data dir
-WORKDIR /home/doichain
-RUN mkdir data && \
-	cd data && \
-	mkdir doichain && \
-	mkdir -p \
-	dapp/local && \
-	sudo rm -rf /home/doichain/.doichain \
-	/home/doichain/dapp/.meteor/local && \
-	sudo ln -s /home/doichain/data/doichain /home/doichain/.doichain && \
-	sudo ln -s /home/doichain/data/dapp/local /home/doichain/dapp/.meteor
-
-WORKDIR /home/doichain/dapp
-RUN meteor build build/ --architecture os.linux.x86_64 --directory --server ${DAPP_HOST}:${DAPP_PORT} && \
+	sudo rm -rf /var/lib/apt/lists/* && \
+	cd /home/doichain && \
+	mkdir data && \
+    cd data && \
+    mkdir doichain && \
+    mkdir -p \
+    dapp/local && \
+    sudo rm -rf /home/doichain/.doichain \
+    /home/doichain/dapp/.meteor/local && \
+    sudo ln -s /home/doichain/data/doichain /home/doichain/.doichain && \
+    sudo ln -s /home/doichain/data/dapp/local /home/doichain/dapp/.meteor && \
+    cd /home/doichain/dapp && \
+    meteor build build/ --architecture os.linux.x86_64 --directory --server ${DAPP_HOST}:${DAPP_PORT} && \
     rm -rf node_modules
 
 WORKDIR /home/doichain
