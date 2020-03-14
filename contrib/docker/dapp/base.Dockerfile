@@ -78,7 +78,6 @@ RUN echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef  db-4
     vim \
     bc \
     bsdtar \
-    dos2unix \
     git \
     libboost-all-dev \
     libevent-dev \
