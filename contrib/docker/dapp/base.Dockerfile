@@ -55,16 +55,38 @@ RUN echo '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef  db-4
 	sudo make install && \
 	sudo ln -s /usr/local/BerkeleyDB.4.8 /usr/include/db4.8 && \
 	sudo ln -s /usr/include/db4.8/lib/* /usr/lib && \
-    sudo ln -s /usr/include/db4.8/include/* /usr/include
+    sudo ln -s /usr/include/db4.8/include/* /usr/include && \
+    cd /home/doichain && \
+    mkdir .doichain scripts && \
+    git clone --branch ${DOICHAIN_VER} https://github.com/Doichain/core.git doichain-core && \
+    cd doichain-core && \
+    ./autogen.sh && \
+    ./configure --without-gui  --disable-tests  --disable-gui-tests && \
+    make && \
+    sudo make install && cd .. && \
+    git clone --branch ${DOICHAIN_DAPP_VER} https://github.com/Doichain/dApp.git dapp && cd dapp && \
+    meteor npm install && \
+    echo "removing build dependencies..." && \
+    sudo rm -rf doichain-core /tmp/build/bdb && \
+    AUTO_ADDED_PACKAGES=`apt-mark showauto` && \
+    sudo apt-get remove -y \
+    autoconf \
+    apt-utils \
+    bsdmainutils \
+    build-essential \
+    curl \
+    jq \
+    vim \
+    bc \
+    bsdtar \
+    dos2unix \
+    git \
+    libboost-all-dev \
+    libevent-dev \
+    libssl-dev \
+    libtool \
+    pkg-config \
+    $AUTO_ADDED_PACKAGES && \
+    sudo apt-get autoremove -y && \
+    sudo apt-get autoclean
 
-#Install doichain-core
-WORKDIR /home/doichain
-RUN mkdir .doichain scripts && \
-	git clone --branch ${DOICHAIN_VER} https://github.com/Doichain/core.git doichain-core && \
-	cd doichain-core && \
-	./autogen.sh && \
-	./configure --without-gui  --disable-tests  --disable-gui-tests && \
-	make && \
-	sudo make install && cd .. && \
-	git clone --branch ${DOICHAIN_DAPP_VER} https://github.com/Doichain/dApp.git dapp && cd dapp && \
-	meteor npm install --save bcrypt

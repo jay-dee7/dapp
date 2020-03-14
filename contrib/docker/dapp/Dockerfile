@@ -61,8 +61,6 @@ RUN sudo dos2unix \
 	getblocktimes.sh \
 	doichain-start.sh \
 	dapp-start.sh && \
-	sudo apt-get --purge remove -y dos2unix build-essential autoconf && \
-	sudo rm -rf /var/lib/apt/lists/* && \
 	cd /home/doichain && \
 	mkdir data && \
     cd data && \
